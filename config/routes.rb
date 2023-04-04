@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   resources :reviews
   # resources :users
   resources :baked_goods
+
+  get "/bios/:length", to: "users#bio_length"
   # get "/bakeries", to: "bakeries#index"
   # get "bakeries", to: "bakeries#show"
   # get "/bakedgoods", to: "baked_goods#index"

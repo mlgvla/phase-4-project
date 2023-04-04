@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    skip_before_action :authorized, only: :create
+    skip_before_action :authorized, only: [:create, :bio_length]
 def index
   users = User.all
   render json: users, include: :reviews
@@ -25,7 +25,20 @@ end
           render json: { errors: ["Not authorized"] }, status: :unauthorized
         end
       end
+
+      # Create a custom dynamic route that renders all the users that have bios with less than or equal to the number of characters given in the dynamic portion of the URL.  If no bios are found, render the error message "No users who have bios of less than ______ characters in length."
+
+      def bio_length
+        number = params[:length].to_i
+
+        users = User.all.filter {|user| user.bio.length <= number }
   
+        if users.length < 1
+            render json: {errors: "No users who have bios of less than #{number} characters in length."};
+        else
+            render json: users
+        end
+      end
     private
 
    
